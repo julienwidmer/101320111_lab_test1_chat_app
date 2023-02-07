@@ -16,37 +16,21 @@
 
         // Greet user and display his username
         socket.on("session", (currentSession) => {
-            document.getElementById("room").innerHTML = `Chat Room - ${currentSession.room}!`;
-
-            // Set group chats
-            currentSession.rooms.forEach((room) => {
-                let newGroupChat = document.createElement("li");
-                newGroupChat.className = "list-group-item d-flex justify-content-between align-items-center";
-                newGroupChat.innerHTML = room.name;
-
-                let activeUsersBadge = document.createElement("span");
-                activeUsersBadge.className = "badge bg-primary";
-                activeUsersBadge.innerHTML = room.online;
-
-                newGroupChat.appendChild(activeUsersBadge);
-                document.getElementById("groups").appendChild(newGroupChat);
-            });
+            document.getElementById("title").innerHTML = `Room - ${currentSession.room}`;
+            document.getElementById("greetings").innerHTML = `Welcome back, ${currentSession.username}!`;
         })
     </script>
 </head>
 <body>
 <div class="container">
     <div class="row pt-4">
-        <h1 class="col-6">Rooms</h1>
+        <h1 class="col-6" id="title">Room</h1>
         <div class="col-6">
             <a class="btn btn-primary float-end" href="/signout">Sign Out</a>
         </div>
     </div>
     <div class="row">
-        <h2 class="h4 text-secondary pb-3" id="room">Chat Room</h2>
-        <ul class="list-group ps-2" id="groups">
-            <!-- Chat Groups will be inserted in DOM via JavaScript -->
-        </ul>
+        <h2 class="h4 text-secondary pb-3" id="greetings">Welcome back!</h2>
     </div>
 </div>
 </body>

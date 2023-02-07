@@ -56,6 +56,7 @@ app.use((req, res, next) => {
     try {
         // Active session --> save username
         currentSession.username = req.session.data.username;
+        currentSession.room = req.session.data.room;
     } catch {
         // Inactive session --> Username is undefined
         console.log("User is NOT signed in.");
@@ -68,6 +69,7 @@ app.use((req, res, next) => {
 let clients = 0;
 let currentSession = {
     username: "n/a",
+    room: "n/a",
     users: [],
     rooms: [
         {
@@ -111,6 +113,3 @@ app.use("/", mainRoutes);
 
 const userRoutes = require("./routes/userRoutes");
 app.use("/user", userRoutes);
-
-const messageRoutes = require("./routes/messageRoutes");
-app.use("/message", messageRoutes);

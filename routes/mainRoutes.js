@@ -49,13 +49,26 @@ routes.get("/signin", async (req, res) => {
 // http://localhost:8081/rooms
 routes.get("/rooms", async (req, res) => {
     if (isUserSessionActive(req.session)) {
-        // User session active -> redirect to chat rooms
-
-        // TODO: Connect session with socket
-        console.log(req.session.data.username);
-
-        // Display rooms page
+        // User session active -> Display (chat) rooms page
         res.sendFile("public/rooms.html", { root : `${__dirname}/../`});
+    } else {
+        // Redirect to sign in page
+        res.redirect("/signin");
+    }
+})
+
+
+// Room
+// http://localhost:8081/room?name=NodeJS
+routes.get("/room", async (req, res) => {
+    if (isUserSessionActive(req.session)) {
+        // User session active -> Save room name
+        console.log(req.query.name);
+        req.session.data.room = req.query.name;
+
+        // User session active -> Display (chat) room page
+        // TODO: Fix undefined room name unless page is refreshed
+        res.sendFile("public/room.html", { root : `${__dirname}/../`});
     } else {
         // Redirect to sign in page
         res.redirect("/signin");
