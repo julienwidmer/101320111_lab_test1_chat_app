@@ -36,3 +36,15 @@ app.use("/user", userRoutes);
 app.listen(SERVER_PORT, () => {
     console.log(`Server listening at: http://localhost:${SERVER_PORT}`);
 });
+
+// Sign Up
+// http://localhost:8081/signup
+app.get("/signup", async (req, res) => {
+    res.sendFile(`${__dirname}/public/signup.html`);
+})
+
+// Sign In
+// http://localhost:8081/signin
+app.get("/signin", async (req, res) => {
+    res.sendFile(`${__dirname}/public/signin.html`);
+})
