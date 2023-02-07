@@ -7,6 +7,7 @@ Student ID:     101320111
 const mongoose = require("mongoose");
 const passwordValidator = require("password-validator");
 const bcrypt = require("bcrypt");
+const {getTimestamp} = require("../timestamp");
 
 // Password validation schema
 const validatePassword = new passwordValidator();
@@ -49,12 +50,22 @@ const UserSchema = new mongoose.Schema({
 "password": "!@#12345"
 }
 
+{
+"username": "guest007",
+"firstname": "Jane",
+"lastname": "Doe",
+"password": "p9q#4$!o"
+}
+
 Once created, a value will be set for
 "created_on" formatted as
 DD-MM-YYYY HH:MM AM/PM
 */
 
 UserSchema.pre("save", function (next) {
+    // Set timestamp if first save
+    if (this.isNew) { this.created_on = getTimestamp() }
+
     // Hash password before saving (hash) into database if modified or first save
     if (this.isModified("password") || this.isNew) {
         // Generate password salt
@@ -72,31 +83,6 @@ UserSchema.pre("save", function (next) {
                 });
             }
         });
-
-        // Set timestamp if first save
-        if (this.isNew) {
-            // Get current date
-            const date = new Date();
-            // Format date to locale format (i.e. 02/06/2023, 10:17 p.m.)
-            const formattedDate = date.toLocaleString('en-CA', {
-                month: '2-digit',
-                day: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-
-            // Format date as timestamp (i.e. 02/06/2023, 10:17 p.m. --> 02-06-2023 10:18 PM)
-            const timestamp = formattedDate.replaceAll("/", "-") // replace day, month and year separators
-                .replace(",", "") // remove year and time separator
-                // change AM and PM format
-                .replace("p.m.", "PM")
-                .replace("a.m.", "AM");
-
-            // Save timestamp
-            this.created_on = timestamp;
-        }
     } else {
         return next();
     }
