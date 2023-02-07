@@ -9,9 +9,10 @@ const routes = express.Router();
 
 function isUserSessionActive(session) {
     try {
-        const user = session.data.username; // used as authentication verification (if no username is set -> error)
-        return true;
+        return session.data.authenticated; // Session becomes active (true) when sign in is successful
     } catch {
+        // Session never started --> set to false (default)
+        session.data = { authenticated: false };
         return false;
     }
 }
@@ -49,6 +50,10 @@ routes.get("/signin", async (req, res) => {
 routes.get("/rooms", async (req, res) => {
     if (isUserSessionActive(req.session)) {
         // User session active -> redirect to chat rooms
+
+        // TODO: Connect session with socket
+        console.log(req.session.data.username);
+
         // Display rooms page
         res.sendFile("public/rooms.html", { root : `${__dirname}/../`});
     } else {

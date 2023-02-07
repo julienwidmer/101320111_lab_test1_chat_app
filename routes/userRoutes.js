@@ -7,7 +7,6 @@ Student ID:     101320111
 const express = require("express");
 const routes = express.Router();
 const UserModel = require("../models/userModel");
-const session = require("express-session");
 
 // http://localhost:8081/user/signup
 routes.post("/signup", async (req, res) => {
@@ -20,9 +19,9 @@ routes.post("/signup", async (req, res) => {
     // Create new User
     const newUser = new UserModel(req.body);
     try {
+        // Save new user
         await newUser.save();
-        //res.status(201).send(newUser);
-        // TODO: save newUser info somewhere
+        // Redirect to chat rooms
         res.redirect("/rooms");
     } catch (error) {
         if (error.toString().includes("duplicate key error")) {
@@ -67,17 +66,13 @@ routes.post("/signin", (req, res) => {
                 }
 
                 if (isMatch) {
-                    const successMessage = {
-                        "status": true,
-                        "username": login.username,
-                        "message": "User logged in successfully"
+                    // Set session as active
+                    req.session.data = {
+                        authenticated: true,
+                        username: login.username
                     };
 
-                    //res.status(200).send(successMessage);
-                    // TODO: save user info somewhere
-
-                    req.session.data = { username: login.username };
-
+                    // Redirect to chat rooms
                     res.redirect("/rooms");
                 } else {
                     // Client side error - wrong password
