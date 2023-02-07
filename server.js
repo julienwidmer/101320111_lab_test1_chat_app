@@ -52,13 +52,26 @@ app.use(express.urlencoded({ extended: true }));
 
 // Socket.io
 const io = socket(server);
+app.use((req, res, next) => {
+    try {
+        // Active session --> save username
+        currentUsername = req.session.data.username;
+    } catch {
+        // Inactive session --> Username is undefined
+        console.log("User is NOT signed in.");
+        //console.log(req.session);
+    }
 
+    next();
+});
+
+let currentUsername = "unknown";
 let clients = 0;
 io.on("connection", (clientSocket) => {
     console.log(`Client connected: ${clientSocket.id}`);
 
-    //TODO: Retrieve username from session
-    clientSocket.emit("username", "Julien");
+    // Send username to client socket
+    clientSocket.emit("username", currentUsername);
 
     clients += 1;
     clientSocket.on("disconnect", () => {
@@ -66,7 +79,7 @@ io.on("connection", (clientSocket) => {
         console.log(`Client disconnected: ${clientSocket.id}`);
     })
 
-    console.log(`Client(s): ${clients}`);
+    console.log(`Number of client(s): ${clients}`);
 })
 
 

@@ -14,8 +14,9 @@
     <script>
         const socket = io.connect("http://localhost:8080");
 
+        // Greet user and display his username
         socket.on("username", (data) => {
-            alert(`USERNAME: ${data}`);
+            document.getElementById("greetings").innerHTML = `Welcome back, ${data}!`;
         })
     </script>
 </head>
@@ -28,7 +29,7 @@
                 <a class="btn btn-primary float-end" href="/signout">Sign Out</a>
             </div>
         </div>
-        <h2 class="h4 text-secondary pb-3">Welcome back, JJJ!</h2>
+        <h2 class="h4 text-secondary pb-3" id="greetings">Welcome back!</h2>
         <form class="col-lg-8 col-xl-6" action="/user/signup" method="POST">
             <div class="mb-3">
                 <label class="form-label" for="username">Message</label>
