@@ -14,29 +14,29 @@
 <div class="container">
     <div class="row">
         <h1 class="pt-4 pb-3">Sign Up</h1>
-        <form class="col-lg-8 col-xl-6">
+        <form class="col-lg-8 col-xl-6" action="/user/signup" method="POST">
             <div class="mb-3">
                 <label class="form-label" for="username">Username</label>
-                <input class="form-control" id="username" type="text">
+                <input class="form-control" id="username" type="text" name="username">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="firstname">First Name</label>
-                <input class="form-control" id="firstname" type="text">
+                <input class="form-control" id="firstname" type="text" name="firstname">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="lastname">Last Name</label>
-                <input class="form-control" id="lastname" type="text">
+                <input class="form-control" id="lastname" type="text" name="lastname">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="password">Password</label>
-                <input aria-describedby="passwordHelp" class="form-control" id="password" type="text">
+                <input aria-describedby="passwordHelp" class="form-control" id="password" type="password" name="password">
                 <div class="form-text" id="passwordHelp">Please use at least 3 symbols, 1 digit, no spaces and at least
                     8
                     characters
                 </div>
             </div>
             <button class="btn btn-primary" type="submit">Sign Up</button>
-            <a class="btn btn-outline-primary" href="/signin" type="submit">Already have an account?</a>
+            <a class="btn btn-outline-primary" href="/signin">Already have an account?</a>
         </form>
     </div>
 </div>

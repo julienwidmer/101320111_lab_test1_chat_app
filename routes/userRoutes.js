@@ -7,20 +7,23 @@ Student ID:     101320111
 const express = require("express");
 const routes = express.Router();
 const UserModel = require("../models/userModel");
+const session = require("express-session");
 
 // http://localhost:8081/user/signup
 routes.post("/signup", async (req, res) => {
     // Validate request
     if(JSON.stringify(req.body) == "{}") {
         // Client side error
-        return res.status(400).send({message: "User content can not be empty"});
+        return res.status(400).send({message: "Form can not be empty"});
     }
 
     // Create new User
     const newUser = new UserModel(req.body);
     try {
         await newUser.save();
-        res.status(201).send(newUser);
+        //res.status(201).send(newUser);
+        // TODO: save newUser info somewhere
+        res.redirect("/rooms");
     } catch (error) {
         if (error.toString().includes("duplicate key error")) {
             // Client side error -> username must be unique
@@ -70,7 +73,12 @@ routes.post("/signin", (req, res) => {
                         "message": "User logged in successfully"
                     };
 
-                    res.status(200).send(successMessage);
+                    //res.status(200).send(successMessage);
+                    // TODO: save user info somewhere
+
+                    req.session.data = { username: login.username };
+
+                    res.redirect("/rooms");
                 } else {
                     // Client side error - wrong password
                     res.status(400).send(wrongCredentialsMessage);
