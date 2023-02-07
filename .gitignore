@@ -1,0 +1,11 @@
+# NPM packages
+node_modules/
+
+# Environment variables
+.env
+
+# PhpStorm config files
+.idea/
+
+# macOS Finder
+.DS_Store
