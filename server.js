@@ -55,7 +55,7 @@ const io = socket(server);
 app.use((req, res, next) => {
     try {
         // Active session --> save username
-        currentUsername = req.session.data.username;
+        currentSession.username = req.session.data.username;
     } catch {
         // Inactive session --> Username is undefined
         console.log("User is NOT signed in.");
@@ -65,13 +65,35 @@ app.use((req, res, next) => {
     next();
 });
 
-let currentUsername = "unknown";
 let clients = 0;
+let currentSession = {
+    username: "n/a",
+    users: [],
+    rooms: [
+        {
+            name: "COVID-19",
+            online: 0
+        },
+        {
+            name: "NodeJS",
+            online: 0
+        },
+        {
+            name: "George Brown College",
+            online: 0
+        },
+        {
+            name: "News",
+            online: 0
+        }
+    ]
+}
+
 io.on("connection", (clientSocket) => {
     console.log(`Client connected: ${clientSocket.id}`);
 
-    // Send username to client socket
-    clientSocket.emit("username", currentUsername);
+    // Send current session info to client socket
+    clientSocket.emit("session", currentSession);
 
     clients += 1;
     clientSocket.on("disconnect", () => {

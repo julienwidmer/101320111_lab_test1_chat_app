@@ -15,28 +15,38 @@
         const socket = io.connect("http://localhost:8080");
 
         // Greet user and display his username
-        socket.on("username", (data) => {
-            document.getElementById("greetings").innerHTML = `Welcome back, ${data}!`;
+        socket.on("session", (currentSession) => {
+            document.getElementById("greetings").innerHTML = `Welcome back, ${currentSession.username}!`;
+
+            // Set group chats
+            currentSession.rooms.forEach((room) => {
+                let newGroupChat = document.createElement("li");
+                newGroupChat.className = "list-group-item d-flex justify-content-between align-items-center";
+                newGroupChat.innerHTML = room.name;
+
+                let activeUsersBadge = document.createElement("span");
+                activeUsersBadge.className = "badge bg-primary";
+                activeUsersBadge.innerHTML = room.online;
+
+                newGroupChat.appendChild(activeUsersBadge);
+                document.getElementById("groups").appendChild(newGroupChat);
+            });
         })
     </script>
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="row pt-4">
-            <h1 class="col-6">Rooms</h1>
-            <div class="col-6">
-                <a class="btn btn-primary float-end" href="/signout">Sign Out</a>
-            </div>
+    <div class="row pt-4">
+        <h1 class="col-6">Rooms</h1>
+        <div class="col-6">
+            <a class="btn btn-primary float-end" href="/signout">Sign Out</a>
         </div>
+    </div>
+    <div class="row">
         <h2 class="h4 text-secondary pb-3" id="greetings">Welcome back!</h2>
-        <form class="col-lg-8 col-xl-6" action="/user/signup" method="POST">
-            <div class="mb-3">
-                <label class="form-label" for="username">Message</label>
-                <input class="form-control" id="username" type="text" name="username">
-            </div>
-            <button class="btn btn-primary" type="submit">Sign Up</button>
-        </form>
+        <ul class="list-group ps-2" id="groups">
+            <!-- Chat Groups will be inserted in DOM via JavaScript -->
+        </ul>
     </div>
 </div>
 </body>
