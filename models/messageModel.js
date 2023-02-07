@@ -8,18 +8,24 @@ const mongoose = require("mongoose");
 const {getTimestamp} = require("../timestamp");
 
 // Define schema
-const PMSchema = new mongoose.Schema({
+const MessageSchema = new mongoose.Schema({
     from_user: String,
-    to_user: String,
+    room: String,
     message: String,
     date_sent: String
 })
 
-/* Private Message JSON example:
+/* Message (public in a room) JSON example:
 {
 "from_user": "yoddler201",
-"to_user": "guest007",
-"message": "Hey, How are you?!"
+"room": "covid19",
+"message": "Hello World"
+}
+
+{
+"from_user": "guest007",
+"room": "covid19",
+"message": "Hopefully things will get better."
 }
 
 Once created, a value will be set for
@@ -27,7 +33,7 @@ Once created, a value will be set for
 DD-MM-YYYY HH:MM AM/PM
 */
 
-PMSchema.pre("save", function (next) {
+MessageSchema.pre("save", function (next) {
     // Set timestamp if first save
     if (this.isNew) {
         // Save timestamp
@@ -37,5 +43,5 @@ PMSchema.pre("save", function (next) {
 });
 
 // Create mongodb schema
-const private_message = mongoose.model("private_message", PMSchema);
-module.exports = private_message;
+const message = mongoose.model("message", MessageSchema);
+module.exports = message;
